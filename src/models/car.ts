@@ -7,11 +7,11 @@ export interface Car {
   price: number;
 }
 
-const carSchema: Schema = new Schema<Car>({
-  brand: String,
-  name: String,
-  year: Number,
-  price: Number,
+const carSchema: Schema<Car> = new Schema<Car>({
+  brand: { type: String, index: true },
+  name: { type: String, required: true, index: true },
+  year: { type: Number, index: true },
+  price: { type: Number, index: true },
 });
 
 export const CarModel: Model<Car & Document> = model<Car & Document>('Car', carSchema);

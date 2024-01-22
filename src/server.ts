@@ -13,6 +13,9 @@ const db = mongoose.connection;
 db.once('open', () => {
   console.log('Connected to MongoDB');
 });
+db.on('error', (error) => {
+  console.error('Mongoose connection error:', error);
+});
 
 app.use(bodyParser.json());
 

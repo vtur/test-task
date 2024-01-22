@@ -19,7 +19,7 @@ async function main() {
 
 
   while (true) {
-    console.log('Choose an option:');
+    console.log(`\nChoose an option:`);
     const options = clientService.isAuth() ? auth : notAuth;
     options.forEach((option, index) => {
       console.log(`${index + 1}. ${option.label}`);

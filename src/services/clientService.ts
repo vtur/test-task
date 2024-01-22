@@ -14,7 +14,7 @@ export class ClientService {
     return readlineSync.question(prompt).trim();
   }
 
-  isAuth(): boolean | AxiosRequestConfig {
+  public isAuth(): boolean | AxiosRequestConfig {
     return this.authToken ? true : false;
   }
 
@@ -29,11 +29,11 @@ export class ClientService {
     return true;
   }
 
-  async askOptionNumber(): Promise<string> {
+  public async askOptionNumber(): Promise<string> {
     return this.getUserInput('Enter the option number: ');
   }
 
-  async registerUser(): Promise<void> {
+  public async registerUser(): Promise<void> {
     try {
       const username = this.getUserInput('Enter username: ');
       const password = this.getUserInput('Enter password: ');
@@ -43,12 +43,11 @@ export class ClientService {
       this.authToken = response.data.token;
       
     } catch (error) {
-      console.log(error);
       console.error('Registration failed:', error.response ? error.response.data : error.message);
     }
   }
 
-  async loginUser(): Promise<void> {
+  public async loginUser(): Promise<void> {
     try {
       const username = this.getUserInput('Enter username: ');
       const password = this.getUserInput('Enter password: ');
@@ -61,7 +60,7 @@ export class ClientService {
     }
   }
 
-  async getCars(): Promise<void> {
+  public async getCars(): Promise<void> {
     try {
       if (!this.checkAuth()) return;
 
@@ -72,7 +71,7 @@ export class ClientService {
     }
   }
 
-  async getCarsByBrand(): Promise<void> {
+  public async getCarsByBrand(): Promise<void> {
     try {
       if (!this.checkAuth()) return;
 
@@ -101,12 +100,19 @@ export class ClientService {
     }
   }
 
-  async addCar(): Promise<void> {
+  public async addCar(): Promise<void> {
     try {
       if (!this.checkAuth()) return;
 
+      let name: string;
+      while (!name) {
+        name = this.getUserInput('Enter car name: ').trim();
+        if (!name) {
+          console.log('Car name is required. Please enter a valid name.');
+        }
+      }
+
       const brand = this.getUserInput('Enter car brand: ');
-      const name = this.getUserInput('Enter car name: ');
       const year = parseInt(this.getUserInput('Enter car year: '), 10);
       const price = parseFloat(this.getUserInput('Enter car price: '));
 
@@ -117,7 +123,7 @@ export class ClientService {
     }
   }
 
-  async updateCar(): Promise<void> {
+  public async updateCar(): Promise<void> {
     try {
       if (!this.checkAuth()) return;
 
@@ -130,12 +136,11 @@ export class ClientService {
       const response = await axios.put(`${this.serverUrl}/cars/${carId}`, { brand, name, year, price }, this.authConfig);
       console.log('Car updated:', response.data);
     } catch (error) {
-      console.log(error);
       console.error('Failed to update car:', error.response ? error.response.data : error.message);
     }
   }
 
-  async deleteCar(): Promise<void> {
+  public async deleteCar(): Promise<void> {
     try {
       if (!this.checkAuth()) return;
 
@@ -148,7 +153,6 @@ export class ClientService {
       const response = await axios.delete(`${this.serverUrl}/cars/${carId}`, this.authConfig);
       console.log('Car deleted:', response.data.message);
     } catch (error) {
-      console.log(error);
       console.error('Failed to delete car:', error.response ? error.response.data : error.message);
     }
   }
